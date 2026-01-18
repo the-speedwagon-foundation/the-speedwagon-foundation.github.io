@@ -516,6 +516,7 @@
         </option>
         <option value="https://cors-anywhere.com/">cors-anywhere.com</option>
       </select>
+      <input name="cors-proxy-custom" placeholder="Custom cors-proxy (opt.)" />
 
       <button type="submit">Поиск</button>
     </form>
@@ -623,7 +624,9 @@
         const apiKey = data.get("apikey");
         if (apiKey) params.append("apikey", apiKey);
 
-        const corsProxy = data.get("cors-proxy");
+        const custom = data.get("cors-proxy-custom")
+        const corsProxy =  custom !== null && custom !== '' ? custom : data.get("cors-proxy");
+        data.delete("cors-proxy-custom");
         data.delete("cors-proxy");
 
         const res = await fetch(`${corsProxy}${API}?${params}`);
