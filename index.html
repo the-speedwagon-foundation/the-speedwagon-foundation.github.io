@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BIZARRE VIEW</title>
+
+    <style>
+      :root {
+        --bg: #0f1115;
+        --fg: #e6e6e6;
+        --muted: #8a8f98;
+        --accent: #4da3ff;
+        --card: #171a21;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      header {
+        padding: 16px 20px;
+        border-bottom: 1px solid #222;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        padding: 16px;
+        background: #0c0e12;
+        border-bottom: 1px solid #222;
+      }
+
+      input,
+      select,
+      button {
+        background: var(--card);
+        color: var(--fg);
+        border: 1px solid #222;
+        padding: 8px 10px;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+
+      input::placeholder {
+        color: var(--muted);
+      }
+
+      button {
+        cursor: pointer;
+        background: var(--accent);
+        border: none;
+        color: #000;
+        font-weight: 600;
+      }
+
+      button.secondary {
+        background: var(--card);
+        color: var(--fg);
+        border: 1px solid #333;
+      }
+
+      #grid {
+        padding: 16px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 8px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .card img {
+        width: 100%;
+        display: block;
+      }
+
+      .card .info {
+        padding: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+      }
+
+      .card a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      footer {
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #222;
+        background: #0c0e12;
+      }
+
+      footer span {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      header > div {
+        display: flex;
+        justify-items: center;
+        align-items: center;
+      }
+
+      header > div > span {
+        margin-right: 1rem;
+      }
+
+      #helpBtn {
+        text-align: center;
+        vertical-align: middle;
+        width: 32px;
+        height: 32px;
+        font-size: small;
+        border-radius: 50%;
+        border: 1px solid #333;
+        background: var(--card);
+        color: var(--fg);
+        cursor: pointer;
+        font-weight: 700;
+      }
+
+      #helpOverlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
+
+      .helpModal {
+        background: var(--card);
+        max-width: 900px;
+        max-height: 80vh;
+        overflow: auto;
+        padding: 20px;
+        border-radius: 10px;
+        position: relative;
+      }
+
+      .helpModal .close {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        background: none;
+        border: none;
+        color: var(--fg);
+        font-size: 22px;
+        cursor: pointer;
+      }
+
+      .api-grid-search {
+        display: grid;
+        grid-template-columns: 140px 1fr 1fr;
+        gap: 10px 16px;
+        font-size: 13px;
+      }
+
+      .api-grid-search .header {
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      .api-grid-search ul {
+        padding-left: 16px;
+        margin: 0;
+      }
+
+      .api-grid-search .colors span {
+        margin-right: 6px;
+      }
+
+      .menacing {
+        position: relative;
+        display: inline;
+        width: 30px;
+        height: 30px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div>
+        <span>BIZARRE VIEW</span>
+        <svg
+          width="32"
+          height="32"
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 512 512"
+          enable-background="new 0 0 512 512"
+          xml:space="preserve"
+        >
+          <g>
+            <linearGradient
+              id="SVGID_1_"
+              gradientUnits="userSpaceOnUse"
+              x1="302.1712"
+              y1="128.7627"
+              x2="414.2205"
+              y2="-4.7723"
+            >
+              <stop offset="0" style="stop-color: #a9447c" />
+              <stop offset="0.3706" style="stop-color: #713068" />
+              <stop offset="1" style="stop-color: #0b0c44" />
+            </linearGradient>
+            <path
+              fill="url(#SVGID_1_)"
+              stroke="#000000"
+              stroke-width="7"
+              d="M276.8,107.5c19,5.7,39.7,11.7,51.8,14.1   C361.7,86.1,424,28.5,444,20.3C418.8,12.5,386.6,7.4,365.2,6C341.6,23.5,295.5,68.3,276.8,107.5z"
+            />
+            <linearGradient
+              id="SVGID_2_"
+              gradientUnits="userSpaceOnUse"
+              x1="382.7103"
+              y1="151.2625"
+              x2="473.6362"
+              y2="42.9013"
+            >
+              <stop offset="0" style="stop-color: #a9447c" />
+              <stop offset="0.3706" style="stop-color: #713068" />
+              <stop offset="1" style="stop-color: #0b0c44" />
+            </linearGradient>
+            <path
+              fill="url(#SVGID_2_)"
+              stroke="#000000"
+              stroke-width="7"
+              d="M357.1,126.9c3.4,6,32.2,32.2,40,31.5   c34.2-16.6,89.9-67.8,101-95c-11.4-9.2-27.5-19-38-20.9C434.7,58.1,371.2,108.1,357.1,126.9z"
+            />
+            <linearGradient
+              id="SVGID_3_"
+              gradientUnits="userSpaceOnUse"
+              x1="35.3239"
+              y1="519.665"
+              x2="344.0546"
+              y2="151.7341"
+            >
+              <stop offset="0" style="stop-color: #b84882" />
+              <stop offset="0.342" style="stop-color: #80356e" />
+              <stop offset="1" style="stop-color: #0c0d45" />
+            </linearGradient>
+            <path
+              fill="url(#SVGID_3_)"
+              stroke="#000000"
+              stroke-width="7"
+              d="M52.9,390.3c-14.3,27-50.6,89.2-35.3,114.4   c3.9,6.5,65.1-11.9,131.8-26.9c46.6-10.4,96.4-24.1,125.2-28.1c11.5-1.6,28.5-26.4,29.4-45c1.2-25.3-0.8-147.8,35.6-223.6   c6-10.1,4.1-29.6-2.7-35.4c-8-6.8-20.2-10.5-42.5-3.5c-14.7,4.6-117.8,57-122.8,53.7c-3.2-2.1,9.9-58.8,11.5-70.6   c-26.3,29.1-164.5,180.1-142.6,202c14.8,14.8,153.9-80.5,185.7-75.9c14.9,2.1,16.9,10.4,16.2,21.4c-1.9,13.7-15.6,100.4-18.1,114.1   C167.5,388,79.9,388.9,52.9,390.3z"
+            />
+          </g>
+        </svg>
+        <svg
+          width="32"
+          height="32"
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 512 512"
+          enable-background="new 0 0 512 512"
+          xml:space="preserve"
+        >
+          <g>
+            <linearGradient
+              id="SVGID_1_"
+              gradientUnits="userSpaceOnUse"
+              x1="302.1712"
+              y1="128.7627"
+              x2="414.2205"
+              y2="-4.7723"
+            >
+              <stop offset="0" style="stop-color: #a9447c" />
+              <stop offset="0.3706" style="stop-color: #713068" />
+              <stop offset="1" style="stop-color: #0b0c44" />
+            </linearGradient>
+            <path
+              fill="url(#SVGID_1_)"
+              stroke="#000000"
+              stroke-width="7"
+              d="M276.8,107.5c19,5.7,39.7,11.7,51.8,14.1   C361.7,86.1,424,28.5,444,20.3C418.8,12.5,386.6,7.4,365.2,6C341.6,23.5,295.5,68.3,276.8,107.5z"
+            />
+            <linearGradient
+              id="SVGID_2_"
+              gradientUnits="userSpaceOnUse"
+              x1="382.7103"
+              y1="151.2625"
+              x2="473.6362"
+              y2="42.9013"
+            >
+              <stop offset="0" style="stop-color: #a9447c" />
+              <stop offset="0.3706" style="stop-color: #713068" />
+              <stop offset="1" style="stop-color: #0b0c44" />
+            </linearGradient>
+            <path
+              fill="url(#SVGID_2_)"
+              stroke="#000000"
+              stroke-width="7"
+              d="M357.1,126.9c3.4,6,32.2,32.2,40,31.5   c34.2-16.6,89.9-67.8,101-95c-11.4-9.2-27.5-19-38-20.9C434.7,58.1,371.2,108.1,357.1,126.9z"
+            />
+            <linearGradient
+              id="SVGID_3_"
+              gradientUnits="userSpaceOnUse"
+              x1="35.3239"
+              y1="519.665"
+              x2="344.0546"
+              y2="151.7341"
+            >
+              <stop offset="0" style="stop-color: #b84882" />
+              <stop offset="0.342" style="stop-color: #80356e" />
+              <stop offset="1" style="stop-color: #0c0d45" />
+            </linearGradient>
+            <path
+              fill="url(#SVGID_3_)"
+              stroke="#000000"
+              stroke-width="7"
+              d="M52.9,390.3c-14.3,27-50.6,89.2-35.3,114.4   c3.9,6.5,65.1-11.9,131.8-26.9c46.6-10.4,96.4-24.1,125.2-28.1c11.5-1.6,28.5-26.4,29.4-45c1.2-25.3-0.8-147.8,35.6-223.6   c6-10.1,4.1-29.6-2.7-35.4c-8-6.8-20.2-10.5-42.5-3.5c-14.7,4.6-117.8,57-122.8,53.7c-3.2-2.1,9.9-58.8,11.5-70.6   c-26.3,29.1-164.5,180.1-142.6,202c14.8,14.8,153.9-80.5,185.7-75.9c14.9,2.1,16.9,10.4,16.2,21.4c-1.9,13.7-15.6,100.4-18.1,114.1   C167.5,388,79.9,388.9,52.9,390.3z"
+            />
+          </g>
+        </svg>
+        <svg
+          width="32"
+          height="32"
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          x="0px"
+          y="0px"
+          viewBox="0 0 512 512"
+          enable-background="new 0 0 512 512"
+          xml:space="preserve"
+        >
+          <g>
+            <linearGradient
+              id="SVGID_1_"
+              gradientUnits="userSpaceOnUse"
+              x1="302.1712"
+              y1="128.7627"
+              x2="414.2205"
+              y2="-4.7723"
+            >
+              <stop offset="0" style="stop-color: #a9447c" />
+              <stop offset="0.3706" style="stop-color: #713068" />
+              <stop offset="1" style="stop-color: #0b0c44" />
+            </linearGradient>
+            <path
+              fill="url(#SVGID_1_)"
+              stroke="#000000"
+              stroke-width="7"
+              d="M276.8,107.5c19,5.7,39.7,11.7,51.8,14.1   C361.7,86.1,424,28.5,444,20.3C418.8,12.5,386.6,7.4,365.2,6C341.6,23.5,295.5,68.3,276.8,107.5z"
+            />
+            <linearGradient
+              id="SVGID_2_"
+              gradientUnits="userSpaceOnUse"
+              x1="382.7103"
+              y1="151.2625"
+              x2="473.6362"
+              y2="42.9013"
+            >
+              <stop offset="0" style="stop-color: #a9447c" />
+              <stop offset="0.3706" style="stop-color: #713068" />
+              <stop offset="1" style="stop-color: #0b0c44" />
+            </linearGradient>
+            <path
+              fill="url(#SVGID_2_)"
+              stroke="#000000"
+              stroke-width="7"
+              d="M357.1,126.9c3.4,6,32.2,32.2,40,31.5   c34.2-16.6,89.9-67.8,101-95c-11.4-9.2-27.5-19-38-20.9C434.7,58.1,371.2,108.1,357.1,126.9z"
+            />
+            <linearGradient
+              id="SVGID_3_"
+              gradientUnits="userSpaceOnUse"
+              x1="35.3239"
+              y1="519.665"
+              x2="344.0546"
+              y2="151.7341"
+            >
+              <stop offset="0" style="stop-color: #b84882" />
+              <stop offset="0.342" style="stop-color: #80356e" />
+              <stop offset="1" style="stop-color: #0c0d45" />
+            </linearGradient>
+            <path
+              fill="url(#SVGID_3_)"
+              stroke="#000000"
+              stroke-width="7"
+              d="M52.9,390.3c-14.3,27-50.6,89.2-35.3,114.4   c3.9,6.5,65.1-11.9,131.8-26.9c46.6-10.4,96.4-24.1,125.2-28.1c11.5-1.6,28.5-26.4,29.4-45c1.2-25.3-0.8-147.8,35.6-223.6   c6-10.1,4.1-29.6-2.7-35.4c-8-6.8-20.2-10.5-42.5-3.5c-14.7,4.6-117.8,57-122.8,53.7c-3.2-2.1,9.9-58.8,11.5-70.6   c-26.3,29.1-164.5,180.1-142.6,202c14.8,14.8,153.9-80.5,185.7-75.9c14.9,2.1,16.9,10.4,16.2,21.4c-1.9,13.7-15.6,100.4-18.1,114.1   C167.5,388,79.9,388.9,52.9,390.3z"
+            />
+          </g>
+        </svg>
+      </div>
+      <button id="helpBtn" title="Search API help">?</button>
+    </header>
+
+    <form id="searchForm">
+      <input name="q" placeholder="Поиск" />
+
+      <select name="categories">
+        <option value="111">Все категории</option>
+        <option value="100">Общее</option>
+        <option value="010">Аниме</option>
+        <option value="001">Люди</option>
+        Ы
+      </select>
+
+      <select name="purity">
+        <option value="100">SFW</option>
+        <!-- <option value="110">SFW + Sketchy</option> -->
+        <!-- <option value="111">Все (нужен API key)</option> -->
+      </select>
+
+      <select name="sorting">
+        <option selected value="toplist">Toplist</option>
+        <option value="date_added">Date added</option>
+        <option value="relevance">Relevance</option>
+        <option value="views">Views</option>
+        <option value="favorites">Favorites</option>
+        <option value="random">Random</option>
+      </select>
+
+      <select name="topRange">
+        <option value="1d">1d</option>
+        <option value="3d">3d</option>
+        <option value="1w">1w</option>
+        <option selected value="1M">1M</option>
+        <option value="3M">3M</option>
+        <option value="6M">1y</option>
+      </select>
+
+      <select name="order">
+        <option value="desc">Desc</option>
+        <option value="asc">Asc</option>
+      </select>
+
+      <input name="atleast" placeholder="Минимум (1920x1080)" />
+      <input name="ratios" placeholder="Ratio (16x9)" />
+
+      <select name="colors">
+        <option selected value="">Все</option>
+        <option value="660000">DkRed</option>
+        <option value="990000">Red</option>
+        <option value="cc0000">Vivid Red</option>
+        <option value="cc3333">Crimson</option>
+        <option value="ea4c88">Rose</option>
+        <option value="993399">Purple</option>
+        <option value="663399">Violet</option>
+        <option value="333399">Indigo</option>
+        <option value="0066cc">Blue</option>
+        <option value="0099cc">Sky Blue</option>
+        <option value="66cccc">Turquoise</option>
+        <option value="77cc33">Lime</option>
+        <option value="669900">Olive</option>
+        <option value="336600">DkGreen</option>
+        <option value="666600">Drab</option>
+        <option value="999900">Moss</option>
+        <option value="cccc33">Mustard</option>
+        <option value="ffff00">Yellow</option>
+        <option value="ffcc33">Gold</option>
+        <option value="ff9900">Orange</option>
+        <option value="ff6600">Pumpkin</option>
+        <option value="cc6633">Rust</option>
+        <option value="996633">Tan</option>
+        <option value="663300">Brown</option>
+        <option value="000000">Black</option>
+        <option value="999999">Gray</option>
+        <option value="cccccc">LtGray</option>
+        <option value="ffffff">White</option>
+        <option value="424153">Charcoal</option>
+      </select>
+
+      <input name="seed" placeholder="Seed (random)" />
+      <input name="apikey" placeholder="API key (opt.)" />
+
+      <select name="cors-proxy">
+        <option selected value="https://corsproxy.io/?">corsproxy.io</option>
+        <option value="https://api.allorigins.win/raw?url=">
+          allorigins.win
+        </option>
+        <option value="https://cors-anywhere.com/">cors-anywhere.com</option>
+      </select>
+
+      <button type="submit">Поиск</button>
+    </form>
+
+    <div id="grid"></div>
+
+    <footer>
+      <button id="prev" class="secondary">← Prev</button>
+      <span id="pageInfo">Page 1</span>
+      <button id="next" class="secondary">Next →</button>
+    </footer>
+
+    <div id="helpOverlay">
+      <div class="helpModal">
+        <button class="close">×</button>
+
+        <div class="api-grid-search">
+          <span class="header">Parameter</span>
+          <span class="header">Allowed values / Examples</span>
+          <span class="header">Description</span>
+
+          <span>q</span>
+          <span>
+            <ul>
+              <li>tagname – fuzzy search</li>
+              <li>-tagname – exclude</li>
+              <li>+tag1 +tag2 – must have</li>
+              <li>@username – user uploads</li>
+              <li>id:123 – exact (solo)</li>
+              <li>type:png/jpg</li>
+              <li>like:ID – similar</li>
+            </ul>
+          </span>
+          <span>Main search query</span>
+
+          <span>sorting</span>
+          <span>date_added, relevance, random, views, favorites, toplist</span>
+          <span>Sort method</span>
+
+          <span>topRange</span>
+          <span>1d, 3d, 1w, <b>1M</b>, 3M, 6M, 1y</span>
+          <span>Sorting MUST be set to 'toplist'</span>
+
+          <span>order</span>
+          <span><b>desc</b>, asc</span>
+          <span>Sort order</span>
+
+          <span>atleast</span>
+          <span>1920x1080</span>
+          <span>Minimum resolution</span>
+
+          <span>ratios</span>
+          <span>16x9, 16x10</span>
+          <span>Aspect ratio</span>
+
+          <span>colors</span>
+          <span class="colors">
+            <span style="color: #ff6600">Pumpkin</span>
+            <span style="color: #0099cc">Sky Blue</span>
+            <span style="color: #77cc33">Lime</span>
+            <span style="color: #ffffff">White</span>
+          </span>
+          <span>Color filter</span>
+
+          <span>page</span>
+          <span>1 → ∞</span>
+          <span>Pagination</span>
+
+          <span>seed</span>
+          <span>[a-zA-Z0-9]{6}</span>
+          <span>Random seed</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const API = "https://wallhaven.cc/api/v1/search";
+      let currentPage = 1;
+      let lastPage = 1;
+
+      const form = document.getElementById("searchForm");
+      const grid = document.getElementById("grid");
+      const pageInfo = document.getElementById("pageInfo");
+      const helpBtn = document.getElementById("helpBtn");
+      const helpOverlay = document.getElementById("helpOverlay");
+
+      async function fetchWallpapers(page = 1) {
+        const data = new FormData(form);
+        const params = new URLSearchParams();
+
+        const colorsValue = data.get("colors");
+        if (colorsValue === "") {
+          data.delete("colors");
+        }
+
+        for (const [key, value] of data.entries()) {
+          if (value && key !== "apikey") params.append(key, value);
+        }
+
+        params.append("page", page);
+
+        const apiKey = data.get("apikey");
+        if (apiKey) params.append("apikey", apiKey);
+
+        const corsProxy = data.get("cors-proxy");
+        data.delete("cors-proxy");
+
+        const res = await fetch(`${corsProxy}${API}?${params}`);
+        const json = await res.json();
+
+        grid.innerHTML = "";
+        json.data.forEach((w) => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+      <img src="${w.thumbs.small}" alt="">
+      <div class="info">
+        <span>${w.resolution}</span>
+        <a href="${w.path}" download>Download</a>
+      </div>
+    `;
+          grid.appendChild(card);
+        });
+
+        currentPage = json.meta.current_page;
+        lastPage = json.meta.last_page;
+        pageInfo.textContent = `Page ${currentPage} / ${lastPage}`;
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        fetchWallpapers(1);
+      });
+
+      document.getElementById("prev").onclick = () => {
+        if (currentPage > 1) fetchWallpapers(currentPage - 1);
+      };
+
+      document.getElementById("next").onclick = () => {
+        if (currentPage < lastPage) fetchWallpapers(currentPage + 1);
+      };
+
+      helpBtn.onclick = () => (helpOverlay.style.display = "flex");
+      helpOverlay.onclick = (e) => {
+        if (e.target === helpOverlay || e.target.classList.contains("close")) {
+          helpOverlay.style.display = "none";
+        }
+      };
+
+      fetchWallpapers();
+    </script>
+  </body>
+</html>
