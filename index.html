@@ -637,10 +637,10 @@
           const card = document.createElement("div");
           card.className = "card";
           card.innerHTML = `
-      <img src="${w.thumbs.small}" alt="">
+      <img src="https://corsproxy.io/?${w.thumbs.small}" alt="">
       <div class="info">
         <span>${w.resolution}</span>
-        <a href="${w.path}" download>Download</a>
+        <a href="https://api.allorigins.win/raw?url=${w.path}" download>Download</a>
       </div>
     `;
           grid.appendChild(card);
