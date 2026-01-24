@@ -515,6 +515,7 @@
           allorigins.win
         </option>
         <option value="https://cors-anywhere.com/">cors-anywhere.com</option>
+        <option value="http://45.92.174.106:3128/?url=">bizzare-help</option>
       </select>
       <input name="cors-proxy-custom" placeholder="Custom cors-proxy (opt.)" />
 
@@ -637,10 +638,10 @@
           const card = document.createElement("div");
           card.className = "card";
           card.innerHTML = `
-      <img src="https://corsproxy.io/?${w.thumbs.small}" alt="">
+      <img src="http://45.92.174.106:3128/?url=${w.thumbs.small}" alt="">
       <div class="info">
         <span>${w.resolution}</span>
-        <a href="https://api.allorigins.win/raw?url=${w.path}" download>Download</a>
+        <a href="http://45.92.174.106:3128/?url=${w.path}" download>Download</a>
       </div>
     `;
           grid.appendChild(card);
