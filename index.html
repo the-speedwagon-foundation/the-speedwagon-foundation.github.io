@@ -73,7 +73,7 @@
       #grid {
         padding: 16px;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         gap: 16px;
       }
 
@@ -95,7 +95,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 12px;
+        font-size: 10px;
       }
 
       .card a {
@@ -438,13 +438,6 @@
         <option value="100">Общее</option>
         <option value="010">Аниме</option>
         <option value="001">Люди</option>
-        Ы
-      </select>
-
-      <select name="purity">
-        <option value="100">SFW</option>
-        <!-- <option value="110">SFW + Sketchy</option> -->
-        <!-- <option value="111">Все (нужен API key)</option> -->
       </select>
 
       <select name="sorting">
@@ -465,16 +458,10 @@
         <option value="6M">1y</option>
       </select>
 
-      <select name="order">
-        <option value="desc">Desc</option>
-        <option value="asc">Asc</option>
-      </select>
-
       <input name="atleast" placeholder="Минимум (1920x1080)" />
-      <input name="ratios" placeholder="Ratio (16x9)" />
 
       <select name="colors">
-        <option selected value="">Все</option>
+        <option selected value="">Все цвета</option>
         <option value="660000">DkRed</option>
         <option value="990000">Red</option>
         <option value="cc0000">Vivid Red</option>
@@ -505,9 +492,6 @@
         <option value="ffffff">White</option>
         <option value="424153">Charcoal</option>
       </select>
-
-      <input name="seed" placeholder="Seed (random)" />
-      <input name="apikey" placeholder="API key (opt.)" />
 
       <button type="submit">Поиск</button>
     </form>
@@ -607,13 +591,11 @@
         }
 
         for (const [key, value] of data.entries()) {
-          if (value && key !== "apikey") params.append(key, value);
+          params.append(key, value);
         }
 
+        params.append('purity', 'SFW')
         params.append("page", page);
-
-        const apiKey = data.get("apikey");
-        if (apiKey) params.append("apikey", apiKey);
 
         const res = await fetch(`https://proxy.vmlabs.su:3128/?url=${API}?${params}`);
         const json = await res.json();
@@ -626,7 +608,7 @@
       <img src="https://proxy.vmlabs.su:3128/?url=${w.thumbs.small}" alt="">
       <div class="info">
         <span>${w.resolution}</span>
-        <a href="https://proxy.vmlabs.su:3128/?url=${w.path}" download>Download</a>
+        <a href="https://proxy.vmlabs.su:3128/?url=${w.path}" download>${w.path.split('-')[1]}</a>
       </div>
     `;
           grid.appendChild(card);
