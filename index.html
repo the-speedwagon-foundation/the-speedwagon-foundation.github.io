@@ -509,16 +509,6 @@
       <input name="seed" placeholder="Seed (random)" />
       <input name="apikey" placeholder="API key (opt.)" />
 
-      <select name="cors-proxy">
-        <option selected value="https://corsproxy.io/?">corsproxy.io</option>
-        <option value="https://api.allorigins.win/raw?url=">
-          allorigins.win
-        </option>
-        <option value="https://cors-anywhere.com/">cors-anywhere.com</option>
-        <option value="http://45.92.174.106:3128/?url=">bizzare-help</option>
-      </select>
-      <input name="cors-proxy-custom" placeholder="Custom cors-proxy (opt.)" />
-
       <button type="submit">Поиск</button>
     </form>
 
@@ -625,12 +615,7 @@
         const apiKey = data.get("apikey");
         if (apiKey) params.append("apikey", apiKey);
 
-        const custom = data.get("cors-proxy-custom")
-        const corsProxy =  custom !== null && custom !== '' ? custom : data.get("cors-proxy");
-        data.delete("cors-proxy-custom");
-        data.delete("cors-proxy");
-
-        const res = await fetch(`${corsProxy}${API}?${params}`);
+        const res = await fetch(`https://proxy.vmlabs.su:3128/?url=${corsProxy}${API}?${params}`);
         const json = await res.json();
 
         grid.innerHTML = "";
@@ -638,10 +623,10 @@
           const card = document.createElement("div");
           card.className = "card";
           card.innerHTML = `
-      <img src="http://45.92.174.106:3128/?url=${w.thumbs.small}" alt="">
+      <img src="https://proxy.vmlabs.su:3128/?url=${w.thumbs.small}" alt="">
       <div class="info">
         <span>${w.resolution}</span>
-        <a href="http://45.92.174.106:3128/?url=${w.path}" download>Download</a>
+        <a href="https://proxy.vmlabs.su:3128/?url=${w.path}" download>Download</a>
       </div>
     `;
           grid.appendChild(card);
