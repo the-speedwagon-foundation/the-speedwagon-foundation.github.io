@@ -615,7 +615,7 @@
         const apiKey = data.get("apikey");
         if (apiKey) params.append("apikey", apiKey);
 
-        const res = await fetch(`https://proxy.vmlabs.su:3128/?url=${corsProxy}${API}?${params}`);
+        const res = await fetch(`https://proxy.vmlabs.su:3128/?url=${API}?${params}`);
         const json = await res.json();
 
         grid.innerHTML = "";
