@@ -271,11 +271,15 @@
         transform: scale(1.05);
       }
 
+      .blur-on .card:hover img {
+        filter: blur(0);
+      }
+
       /* Smooth transition */
       .card img {
         transition:
-          filter 0.25s ease,
-          transform 0.25s ease;
+          filter 0.35s ease,
+          transform 0.35s ease;
       }
 
       /* ---------------- Help Modal Content ---------------- */
