@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
@@ -7,38 +7,65 @@
 
     <style>
       :root {
-        --bg: #0f1115;
-        --fg: #e6e6e6;
-        --muted: #8a8f98;
-        --accent: #4da3ff;
-        --card: #171a21;
+        --bg: #0b0d12;
+        --fg: #e8e9ec;
+        --muted: #9aa0aa;
+        --accent: #5da9ff;
+        --card: #151923;
+        --card-soft: rgba(255, 255, 255, 0.04);
+        --border: rgba(255, 255, 255, 0.08);
+        --radius: 10px;
       }
 
       * {
         box-sizing: border-box;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          sans-serif;
       }
 
       body {
         margin: 0;
-        background: var(--bg);
+        background:
+          radial-gradient(1200px 600px at 20% -10%, #16203a, transparent),
+          var(--bg);
         color: var(--fg);
       }
 
+      /* ---------------- Header ---------------- */
+
       header {
-        padding: 16px 20px;
-        border-bottom: 1px solid #222;
-        font-size: 18px;
-        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 20px;
+        border-bottom: 1px solid var(--border);
+        backdrop-filter: blur(6px);
       }
 
+      header > div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      header span {
+        font-weight: 600;
+        letter-spacing: 0.3px;
+      }
+
+      /* ---------------- Controls ---------------- */
+
       form {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
         gap: 12px;
         padding: 16px;
-        background: #0c0e12;
-        border-bottom: 1px solid #222;
+        background: rgba(0, 0, 0, 0.35);
+        border-bottom: 1px solid var(--border);
       }
 
       input,
@@ -46,43 +73,71 @@
       button {
         background: var(--card);
         color: var(--fg);
-        border: 1px solid #222;
-        padding: 8px 10px;
-        border-radius: 6px;
+        border: 1px solid var(--border);
+        padding: 9px 12px;
+        border-radius: var(--radius);
         font-size: 14px;
+        min-height: 38px;
       }
 
       input::placeholder {
         color: var(--muted);
       }
 
+      input,
+      select {
+        flex: 1 1 160px;
+      }
+
       button {
         cursor: pointer;
-        background: var(--accent);
+        background: linear-gradient(135deg, var(--accent), #3b7dff);
         border: none;
-        color: #000;
+        color: #02040a;
         font-weight: 600;
+        padding: 0 18px;
+        transition:
+          transform 0.15s ease,
+          filter 0.15s ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.1);
       }
 
       button.secondary {
         background: var(--card);
         color: var(--fg);
-        border: 1px solid #333;
+        border: 1px solid var(--border);
       }
 
+      /* ---------------- Gallery ---------------- */
+
       #grid {
-        padding: 16px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        padding: 18px;
+        display: flex;
+        flex-wrap: wrap;
         gap: 16px;
       }
 
       .card {
-        background: var(--card);
-        border-radius: 8px;
+        background:
+          linear-gradient(180deg, var(--card-soft), transparent), var(--card);
+        border-radius: var(--radius);
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        width: 160px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
       }
 
       .card img {
@@ -91,11 +146,12 @@
       }
 
       .card .info {
-        padding: 8px;
+        padding: 8px 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 10px;
+        font-size: 11px;
+        color: var(--muted);
       }
 
       .card a {
@@ -103,53 +159,28 @@
         text-decoration: none;
       }
 
+      /* ---------------- Footer ---------------- */
+
       footer {
-        padding: 12px 16px;
+        padding: 14px 18px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-top: 1px solid #222;
-        background: #0c0e12;
+        border-top: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.35);
       }
 
       footer span {
         font-size: 13px;
         color: var(--muted);
       }
-      header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
 
-      header > div {
-        display: flex;
-        justify-items: center;
-        align-items: center;
-      }
-
-      header > div > span {
-        margin-right: 1rem;
-      }
-
-      #helpBtn {
-        text-align: center;
-        vertical-align: middle;
-        width: 32px;
-        height: 32px;
-        font-size: small;
-        border-radius: 50%;
-        border: 1px solid #333;
-        background: var(--card);
-        color: var(--fg);
-        cursor: pointer;
-        font-weight: 700;
-      }
+      /* ---------------- Help ---------------- */
 
       #helpOverlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.7);
         display: none;
         align-items: center;
         justify-content: center;
@@ -162,14 +193,15 @@
         max-height: 80vh;
         overflow: auto;
         padding: 20px;
-        border-radius: 10px;
+        border-radius: 14px;
         position: relative;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
       }
 
       .helpModal .close {
         position: absolute;
-        top: 8px;
-        right: 12px;
+        top: 10px;
+        right: 14px;
         background: none;
         border: none;
         color: var(--fg);
@@ -177,16 +209,22 @@
         cursor: pointer;
       }
 
+      /* Flex-based "table" */
+
       .api-grid-search {
-        display: grid;
-        grid-template-columns: 140px 1fr 1fr;
-        gap: 10px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
         font-size: 13px;
       }
 
-      .recs {
-        margin-top: 2rem;
-        font-size: 13px;
+      .api-grid-search > span {
+        display: flex;
+      }
+
+      .api-grid-search > span > span,
+      .api-grid-search > span > ul {
+        flex: 1;
       }
 
       .api-grid-search .header {
@@ -199,15 +237,131 @@
         margin: 0;
       }
 
-      .api-grid-search .colors span {
-        margin-right: 6px;
+      .recs {
+        margin-top: 24px;
+        font-size: 13px;
+        color: var(--muted);
       }
 
-      .menacing {
-        position: relative;
-        display: inline;
-        width: 30px;
-        height: 30px;
+      .recs a {
+        color: var(--accent);
+      }
+
+      /* ---------------- Blur Feature Flag ---------------- */
+
+      #blurToggle {
+        padding: 0 14px;
+        height: 32px;
+        border-radius: 999px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        color: var(--fg);
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      #blurToggle.active {
+        background: linear-gradient(135deg, var(--accent), #3b7dff);
+        color: #02040a;
+      }
+
+      /* Feature flag */
+      .blur-on .card img {
+        filter: blur(6px) saturate(0.9);
+        transform: scale(1.05);
+      }
+
+      /* Smooth transition */
+      .card img {
+        transition:
+          filter 0.25s ease,
+          transform 0.25s ease;
+      }
+
+      /* ---------------- Help Modal Content ---------------- */
+
+      .helpModal h2 {
+        margin: 0 0 6px;
+        font-size: 20px;
+      }
+
+      .helpModal .intro {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      .helpModal section {
+        margin-bottom: 18px;
+      }
+
+      .helpModal h3 {
+        margin: 0 0 6px;
+        font-size: 14px;
+        color: var(--accent);
+        letter-spacing: 0.3px;
+      }
+
+      .helpModal p {
+        margin: 0 0 8px;
+        font-size: 13px;
+        color: var(--fg);
+      }
+
+      .helpModal code {
+        background: rgba(255, 255, 255, 0.06);
+        padding: 2px 6px;
+        border-radius: 6px;
+        font-size: 12px;
+      }
+
+      /* Chips */
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 0;
+        margin: 6px 0 0;
+        list-style: none;
+      }
+
+      .chips li {
+        background: var(--card-soft);
+        border: 1px solid var(--border);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      /* Color dots */
+
+      .color-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--c);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      /* Footer link */
+
+      .recs {
+        margin-top: 24px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .recs a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      .recs a:hover {
+        text-decoration: underline;
       }
     </style>
   </head>
@@ -427,7 +581,11 @@
           </g>
         </svg>
       </div>
-      <button id="helpBtn" title="Search API help">?</button>
+
+      <div style="display: flex; gap: 8px">
+        <button id="blurToggle">Blur</button>
+        <button id="helpBtn">?</button>
+      </div>
     </header>
 
     <form id="searchForm">
@@ -508,64 +666,54 @@
       <div class="helpModal">
         <button class="close">×</button>
 
-        <div class="api-grid-search">
-          <span class="header">Parameter</span>
-          <span class="header">Allowed values / Examples</span>
-          <span class="header">Description</span>
+        <h2>Search tips</h2>
+        <p class="intro">
+          Fine-tune results using tags, filters and sorting. Most fields are
+          optional.
+        </p>
 
-          <span>q</span>
-          <span>
-            <ul>
-              <li>tagname – fuzzy search</li>
-              <li>-tagname – exclude</li>
-              <li>+tag1 +tag2 – must have</li>
-              <li>@username – user uploads</li>
-              <li>id:123 – exact (solo)</li>
-              <li>type:png/jpg</li>
-              <li>like:ID – similar</li>
-            </ul>
-          </span>
-          <span>Main search query</span>
+        <section>
+          <h3>Query</h3>
+          <p>Use keywords or tags to describe what you want.</p>
+          <ul class="chips">
+            <li><code>tag</code></li>
+            <li><code>-exclude</code></li>
+            <li><code>+required</code></li>
+            <li><code>@user</code></li>
+          </ul>
+        </section>
 
-          <span>sorting</span>
-          <span>date_added, relevance, random, views, favorites, toplist</span>
-          <span>Sort method</span>
+        <section>
+          <h3>Sorting</h3>
+          <p><code>Toplist</code> works best with a time range.</p>
+        </section>
 
-          <span>topRange</span>
-          <span>1d, 3d, 1w, <b>1M</b>, 3M, 6M, 1y</span>
-          <span>Sorting MUST be set to 'toplist'</span>
+        <section>
+          <h3>Quality filters</h3>
+          <p>Limit results by minimum resolution or dominant color.</p>
+          <ul class="chips">
+            <li><code>1920x1080</code></li>
+            <li><span class="color-dot" style="--c: #0099cc"></span> Blue</li>
+            <li><span class="color-dot" style="--c: #77cc33"></span> Lime</li>
+            <li><span class="color-dot" style="--c: #ffffff"></span> White</li>
+          </ul>
+        </section>
 
-          <span>order</span>
-          <span><b>desc</b>, asc</span>
-          <span>Sort order</span>
+        <section>
+          <h3>Navigation</h3>
+          <p>Use <b>Prev</b> / <b>Next</b> to move between pages.</p>
+        </section>
 
-          <span>atleast</span>
-          <span>1920x1080</span>
-          <span>Minimum resolution</span>
-
-          <span>ratios</span>
-          <span>16x9, 16x10</span>
-          <span>Aspect ratio</span>
-
-          <span>colors</span>
-          <span class="colors">
-            <span style="color: #ff6600">Pumpkin</span>
-            <span style="color: #0099cc">Sky Blue</span>
-            <span style="color: #77cc33">Lime</span>
-            <span style="color: #ffffff">White</span>
-          </span>
-          <span>Color filter</span>
-
-          <span>page</span>
-          <span>1 → ∞</span>
-          <span>Pagination</span>
-
-          <span>seed</span>
-          <span>[a-zA-Z0-9]{6}</span>
-          <span>Random seed</span>
-        </div>
         <div class="recs">
-          <span>Download <a href="https://github.com/the-speedwagon-foundation/humanitarian-cargo/archive/refs/heads/main.zip">Recommendations from the Foundation</a></span>
+          <span>
+            Extra inspiration →
+            <a
+              href="https://github.com/the-speedwagon-foundation/humanitarian-cargo/archive/refs/heads/main.zip"
+              target="_blank"
+            >
+              Foundation recommendations
+            </a>
+          </span>
         </div>
       </div>
     </div>
@@ -594,10 +742,12 @@
           params.append(key, value);
         }
 
-        params.append('purity', 'SFW')
+        params.append("purity", "SFW");
         params.append("page", page);
 
-        const res = await fetch(`https://proxy.vmlabs.su:3128/?url=${API}?${params}`);
+        const res = await fetch(
+          `https://proxy.vmlabs.su:3128/?url=${API}?${params}`,
+        );
         const json = await res.json();
 
         grid.innerHTML = "";
@@ -608,7 +758,7 @@
       <img src="https://proxy.vmlabs.su:3128/?url=${w.thumbs.small}" alt="">
       <div class="info">
         <span>${w.resolution}</span>
-        <a href="https://proxy.vmlabs.su:3128/?url=${w.path}" download>${w.path.split('-')[1]}</a>
+        <a href="https://proxy.vmlabs.su:3128/?url=${w.path}" download>${w.path.split("-")[1]}</a>
       </div>
     `;
           grid.appendChild(card);
@@ -637,6 +787,26 @@
         if (e.target === helpOverlay || e.target.classList.contains("close")) {
           helpOverlay.style.display = "none";
         }
+      };
+
+      const blurToggle = document.getElementById("blurToggle");
+      let blurEnabled = false;
+
+      blurToggle.onclick = () => {
+        blurEnabled = !blurEnabled;
+        document.body.classList.toggle("blur-on", blurEnabled);
+        blurToggle.classList.toggle("active", blurEnabled);
+      };
+
+      blurEnabled = localStorage.getItem("blur") === "1";
+      document.body.classList.toggle("blur-on", blurEnabled);
+      blurToggle.classList.toggle("active", blurEnabled);
+
+      blurToggle.onclick = () => {
+        blurEnabled = !blurEnabled;
+        localStorage.setItem("blur", blurEnabled ? "1" : "0");
+        document.body.classList.toggle("blur-on", blurEnabled);
+        blurToggle.classList.toggle("active", blurEnabled);
       };
 
       fetchWallpapers();
