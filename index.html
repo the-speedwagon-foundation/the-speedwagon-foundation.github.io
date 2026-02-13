@@ -11,10 +11,12 @@
         --fg: #e8e9ec;
         --muted: #9aa0aa;
         --accent: #5da9ff;
+        --accent-strong: #3b7dff;
         --card: #151923;
         --card-soft: rgba(255, 255, 255, 0.04);
         --border: rgba(255, 255, 255, 0.08);
-        --radius: 10px;
+        --radius: 12px;
+        --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
       }
 
       * {
@@ -27,6 +29,10 @@
           sans-serif;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
         background:
@@ -35,7 +41,7 @@
         color: var(--fg);
       }
 
-      /* ---------------- Header ---------------- */
+      /* ================= HEADER ================= */
 
       header {
         display: flex;
@@ -43,13 +49,8 @@
         align-items: center;
         padding: 14px 20px;
         border-bottom: 1px solid var(--border);
-        backdrop-filter: blur(6px);
-      }
-
-      header > div {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        backdrop-filter: blur(8px);
+        animation: fadeIn 0.6s var(--ease);
       }
 
       header a {
@@ -57,7 +58,7 @@
         letter-spacing: 0.3px;
       }
 
-      /* ---------------- Controls ---------------- */
+      /* ================= CONTROLS ================= */
 
       form {
         display: flex;
@@ -66,6 +67,7 @@
         padding: 16px;
         background: rgba(0, 0, 0, 0.35);
         border-bottom: 1px solid var(--border);
+        animation: fadeIn 0.6s 0.1s both var(--ease);
       }
 
       input,
@@ -78,41 +80,45 @@
         border-radius: var(--radius);
         font-size: 14px;
         min-height: 38px;
+        transition: all 0.25s var(--ease);
       }
 
-      input::placeholder {
-        color: var(--muted);
-      }
-
-      input,
-      select {
-        flex: 1 1 160px;
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(93, 169, 255, 0.15);
       }
 
       button {
         cursor: pointer;
-        background: linear-gradient(135deg, var(--accent), #3b7dff);
+        background: linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent-strong)
+        );
         border: none;
         color: #02040a;
         font-weight: 600;
         padding: 0 18px;
-        transition:
-          transform 0.15s ease,
-          filter 0.15s ease;
       }
 
       button:hover {
-        transform: translateY(-1px);
+        transform: translateY(-2px);
         filter: brightness(1.1);
+      }
+
+      button:active {
+        transform: translateY(0) scale(0.96);
       }
 
       button.secondary {
         background: var(--card);
-        color: var(--fg);
         border: 1px solid var(--border);
+        color: var(--fg);
       }
 
-      /* ---------------- Gallery ---------------- */
+      /* ================= GALLERY ================= */
 
       #grid {
         padding: 18px;
@@ -126,30 +132,38 @@
           linear-gradient(180deg, var(--card-soft), transparent), var(--card);
         border-radius: var(--radius);
         overflow: hidden;
+        width: 160px;
         display: flex;
         flex-direction: column;
-        width: 160px;
+        position: relative;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease;
+          transform 0.35s var(--ease),
+          box-shadow 0.35s var(--ease);
+        animation: cardEnter 0.5s var(--ease);
       }
 
       .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+        transform: translateY(-6px);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
       }
 
       .card img {
         width: 100%;
         display: block;
+        transition:
+          transform 0.5s var(--ease),
+          filter 0.5s var(--ease);
+      }
+
+      .card:hover img {
+        transform: scale(1.06);
       }
 
       .card .info {
         padding: 8px 10px;
         display: flex;
         justify-content: space-between;
-        align-items: center;
         font-size: 11px;
         color: var(--muted);
       }
@@ -157,17 +171,50 @@
       .card a {
         color: var(--accent);
         text-decoration: none;
+        transition: opacity 0.2s;
       }
 
-      /* ---------------- Footer ---------------- */
+      .card a:hover {
+        opacity: 0.8;
+      }
+
+      /* ================= BLUR FEATURE ================= */
+
+      .blur-on .card img {
+        filter: blur(6px) saturate(0.9);
+        transform: scale(1.05);
+      }
+
+      .blur-on .card:hover img {
+        filter: blur(0);
+      }
+
+      #blurToggle {
+        padding: 0 14px;
+        height: 32px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: all 0.3s var(--ease);
+      }
+
+      #blurToggle.active {
+        background: linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent-strong)
+        );
+        color: #02040a;
+      }
+
+      /* ================= FOOTER ================= */
 
       footer {
         padding: 14px 18px;
         display: flex;
         justify-content: space-between;
-        align-items: center;
         border-top: 1px solid var(--border);
         background: rgba(0, 0, 0, 0.35);
+        animation: fadeIn 0.6s 0.2s both var(--ease);
       }
 
       footer span {
@@ -175,7 +222,224 @@
         color: var(--muted);
       }
 
-      /* ---------------- Help ---------------- */
+      /* ================= EXPAND OVERLAY ================= */
+
+      .expand-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.35s var(--ease);
+        z-index: 9999;
+      }
+
+      .expand-overlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .expanded-card {
+        background: var(--card);
+        border-radius: 18px;
+        width: min(900px, 90vw);
+        max-height: 90vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 50px 140px rgba(0, 0, 0, 0.7);
+        transform: scale(0.8);
+        opacity: 0;
+        transition:
+          transform 0.5s var(--ease),
+          opacity 0.5s var(--ease);
+      }
+
+      .expand-overlay.visible .expanded-card {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .expanded-card img {
+        width: 100%;
+        max-height: 50vh;
+        object-fit: cover;
+        transition: opacity 0.4s var(--ease);
+      }
+
+      /* ================= EXPANDED CONTENT ================= */
+
+      .expanded-content {
+        padding: 16px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        font-size: 13px;
+      }
+
+      .meta-row {
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        opacity: 0;
+        transform: translateY(8px);
+        animation: fadeUp 0.4s forwards var(--ease);
+      }
+
+      .meta-row:nth-child(1) {
+        animation-delay: 0.05s;
+      }
+      .meta-row:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .meta-row:nth-child(3) {
+        animation-delay: 0.15s;
+      }
+      .meta-row:nth-child(4) {
+        animation-delay: 0.2s;
+      }
+      .meta-row:nth-child(5) {
+        animation-delay: 0.25s;
+      }
+
+      .color-strip {
+        display: flex;
+        gap: 6px;
+      }
+
+      .color-block {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s var(--ease);
+      }
+
+      .color-block:hover {
+        transform: scale(1.2);
+      }
+
+      /* ================= TAGS ================= */
+
+      .tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tag {
+        background: var(--card-soft);
+        border: 1px solid var(--border);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.25s var(--ease);
+      }
+
+      .tag:hover {
+        background: var(--accent);
+        color: #02040a;
+        transform: translateY(-2px);
+      }
+
+      .tag:active {
+        transform: scale(0.9);
+      }
+
+      .tag.active {
+        background: linear-gradient(
+          135deg,
+          var(--accent),
+          var(--accent-strong)
+        );
+        color: #02040a;
+        border: none;
+      }
+
+      /* ---------------- Help Modal Content ---------------- */
+
+      #helpOverlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .35s var(--ease);
+        z-index: 999;
+      }
+
+      .helpModal h2 {
+        margin: 0 0 6px;
+        font-size: 20px;
+      }
+
+      .helpModal .intro {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      .helpModal section {
+        margin-bottom: 18px;
+      }
+
+      .helpModal h3 {
+        margin: 0 0 6px;
+        font-size: 14px;
+        color: var(--accent);
+        letter-spacing: 0.3px;
+      }
+
+      .helpModal p {
+        margin: 0 0 8px;
+        font-size: 13px;
+        color: var(--fg);
+      }
+
+      .helpModal code {
+        background: rgba(255, 255, 255, 0.06);
+        padding: 2px 6px;
+        border-radius: 6px;
+        font-size: 12px;
+      }
+    
+      #helpOverlay.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .helpModal {
+        background: var(--card);
+        min-width: 900px;
+        max-height: 80vh;
+        overflow: auto;
+        padding: 24px;
+        border-radius: 18px;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+        transform: translateY(20px);
+        opacity: 0;
+        transition: all 0.4s var(--ease);
+      }
+
+      #helpOverlay.visible .helpModal {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+
+
+
+
 
       #helpOverlay {
         position: fixed;
@@ -208,8 +472,6 @@
         font-size: 22px;
         cursor: pointer;
       }
-
-      /* Flex-based "table" */
 
       .api-grid-search {
         display: flex;
@@ -247,44 +509,7 @@
         color: var(--accent);
       }
 
-      /* ---------------- Blur Feature Flag ---------------- */
-
-      #blurToggle {
-        padding: 0 14px;
-        height: 32px;
-        border-radius: 999px;
-        background: var(--card);
-        border: 1px solid var(--border);
-        color: var(--fg);
-        font-size: 12px;
-        cursor: pointer;
-      }
-
-      #blurToggle.active {
-        background: linear-gradient(135deg, var(--accent), #3b7dff);
-        color: #02040a;
-      }
-
-      /* Feature flag */
-      .blur-on .card img {
-        filter: blur(6px) saturate(0.9);
-        transform: scale(1.05);
-      }
-
-      .blur-on .card:hover img {
-        filter: blur(0);
-      }
-
-      /* Smooth transition */
-      .card img {
-        transition:
-          filter 0.35s ease,
-          transform 0.35s ease;
-      }
-
-      /* ---------------- Help Modal Content ---------------- */
-
-      .helpModal h2 {
+            .helpModal h2 {
         margin: 0 0 6px;
         font-size: 20px;
       }
@@ -380,6 +605,36 @@
       .title-link:active {
         color: inherit;
         text-decoration: none;
+      }
+      /* ================= ANIMATIONS ================= */
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes cardEnter {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     </style>
   </head>
@@ -736,49 +991,78 @@
       </div>
     </div>
 
+    <div id="expandOverlay" class="expand-overlay"></div>
+
     <script>
       const API = "https://wallhaven.cc/api/v1/search";
+      const PROXY = "https://proxy.vmlabs.su:3128/?url=";
+
       let currentPage = 1;
       let lastPage = 1;
 
       const form = document.getElementById("searchForm");
       const grid = document.getElementById("grid");
       const pageInfo = document.getElementById("pageInfo");
-      const helpBtn = document.getElementById("helpBtn");
+      const overlay = document.getElementById("expandOverlay");
       const helpOverlay = document.getElementById("helpOverlay");
+      const blurToggle = document.getElementById("blurToggle");
+
+      // ================= TAG HELPERS =================
+
+      function getQueryTags() {
+        return form.q.value
+          .split(" ")
+          .filter((t) => t.startsWith("+"))
+          .map((t) => t.slice(1));
+      }
+
+      function toggleTag(tagName) {
+        let parts = form.q.value.split(" ").filter(Boolean);
+        const tag = `+${tagName}`;
+
+        if (parts.includes(tag)) {
+          parts = parts.filter((p) => p !== tag);
+        } else {
+          parts.push(tag);
+        }
+
+        form.q.value = parts.join(" ");
+        fetchWallpapers(1);
+      }
+
+      // ================= FETCH =================
 
       async function fetchWallpapers(page = 1) {
         const data = new FormData(form);
         const params = new URLSearchParams();
 
-        const colorsValue = data.get("colors");
-        if (colorsValue === "") {
-          data.delete("colors");
-        }
-
         for (const [key, value] of data.entries()) {
+          if (key === "colors" && value === "") continue;
           params.append(key, value);
         }
 
         params.append("purity", "SFW");
         params.append("page", page);
 
-        const res = await fetch(
-          `https://proxy.vmlabs.su:3128/?url=${API}?${params}`,
-        );
+        const res = await fetch(`${PROXY}${API}?${params}`);
         const json = await res.json();
 
         grid.innerHTML = "";
+
         json.data.forEach((w) => {
           const card = document.createElement("div");
           card.className = "card";
           card.innerHTML = `
-      <img src="https://proxy.vmlabs.su:3128/?url=${w.thumbs.small}" alt="">
+      <img src="${PROXY}${w.thumbs.small}">
       <div class="info">
         <span>${w.resolution}</span>
-        <a href="https://proxy.vmlabs.su:3128/?url=${w.path}" download>${w.path.split("-")[1]}</a>
+        <a href="${PROXY}${w.path}" download>
+          ${w.path.split("-")[1]}
+        </a>
       </div>
     `;
+
+          card.onclick = () => openExpanded(w);
           grid.appendChild(card);
         });
 
@@ -786,6 +1070,85 @@
         lastPage = json.meta.last_page;
         pageInfo.textContent = `Page ${currentPage} / ${lastPage}`;
       }
+
+      // ================= EXPANDED =================
+
+      async function openExpanded(w) {
+        overlay.classList.add("visible");
+
+        const container = document.createElement("div");
+        container.className = "expanded-card";
+        container.innerHTML = `
+    <img src="${PROXY}${w.path}">
+    <div class="expanded-content">
+      <div>Loading...</div>
+    </div>
+  `;
+
+        overlay.innerHTML = "";
+        overlay.appendChild(container);
+
+        const res = await fetch(
+          `${PROXY}https://wallhaven.cc/api/v1/w/${w.id}`,
+        );
+        const data = (await res.json()).data;
+
+        const content = container.querySelector(".expanded-content");
+
+        content.innerHTML = `
+    ${metaRow("Resolution", data.resolution)}
+    ${metaRow("Views", data.views)}
+    ${metaRow("Favorites", data.favorites)}
+    ${metaRow("Uploader", data.uploader.username)}
+    ${metaRow("Category", data.category)}
+    ${metaRow("Created", data.created_at)}
+    <div class="color-strip"></div>
+    <div class="tag-list"></div>
+  `;
+
+        // Colors
+        const colorStrip = content.querySelector(".color-strip");
+        data.colors.forEach((c) => {
+          const block = document.createElement("div");
+          block.className = "color-block";
+          block.style.background = c;
+          colorStrip.appendChild(block);
+        });
+
+        // Tags
+        const activeTags = getQueryTags();
+        const tagList = content.querySelector(".tag-list");
+
+        data.tags.forEach((t, i) => {
+          const tag = document.createElement("div");
+          tag.className = "tag";
+          tag.textContent = t.name;
+          tag.style.animationDelay = `${i * 40}ms`;
+
+          if (activeTags.includes(t.name)) {
+            tag.classList.add("active");
+          }
+
+          tag.onclick = (e) => {
+            e.stopPropagation();
+            toggleTag(t.name);
+            tag.classList.toggle("active");
+          };
+
+          tagList.appendChild(tag);
+        });
+      }
+
+      function metaRow(label, value) {
+        return `
+    <div class="meta-row">
+      <span>${label}</span>
+      <span>${value}</span>
+    </div>
+  `;
+      }
+
+      // ================= NAVIGATION =================
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -800,23 +1163,31 @@
         if (currentPage < lastPage) fetchWallpapers(currentPage + 1);
       };
 
-      helpBtn.onclick = () => (helpOverlay.style.display = "flex");
+      // ================= OVERLAYS =================
+
+      overlay.onclick = (e) => {
+        if (e.target === overlay) overlay.classList.remove("visible");
+      };
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") overlay.classList.remove("visible");
+      });
+
+      document.getElementById("helpBtn").onclick = () => {
+        helpOverlay.style.display = "flex";
+        helpOverlay.classList.add("visible");
+      }
+
       helpOverlay.onclick = (e) => {
         if (e.target === helpOverlay || e.target.classList.contains("close")) {
           helpOverlay.style.display = "none";
+          helpOverlay.classList.remove("visible");
         }
       };
 
-      const blurToggle = document.getElementById("blurToggle");
-      let blurEnabled = false;
+      // ================= BLUR =================
 
-      blurToggle.onclick = () => {
-        blurEnabled = !blurEnabled;
-        document.body.classList.toggle("blur-on", blurEnabled);
-        blurToggle.classList.toggle("active", blurEnabled);
-      };
-
-      blurEnabled = localStorage.getItem("blur") === "1";
+      let blurEnabled = localStorage.getItem("blur") === "1";
       document.body.classList.toggle("blur-on", blurEnabled);
       blurToggle.classList.toggle("active", blurEnabled);
 
@@ -826,6 +1197,8 @@
         document.body.classList.toggle("blur-on", blurEnabled);
         blurToggle.classList.toggle("active", blurEnabled);
       };
+
+      // ================= INIT =================
 
       fetchWallpapers();
     </script>
