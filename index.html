@@ -320,6 +320,15 @@
         transition: transform 0.3s var(--ease);
       }
 
+      .color-block-active {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: transform 0.3s var(--ease);
+        transform: scale(1.2);
+      }
+
       .color-block:hover {
         transform: scale(1.2);
       }
@@ -1016,6 +1025,10 @@
           .map((t) => t.slice(1));
       }
 
+      function getQueryColor() {
+        return form.colors.value;
+      }
+
       function toggleTag(tagName) {
         let parts = form.q.value.split(" ").filter(Boolean);
         const tag = `+${tagName}`;
@@ -1027,6 +1040,16 @@
         }
 
         form.q.value = parts.join(" ");
+        fetchWallpapers(1);
+      }
+
+      function toggleColor(color) {
+        if (color === getQueryColor()) {
+          form.colors.value = ""
+        } else {
+          form.colors.value = color
+        }
+
         fetchWallpapers(1);
       }
 
@@ -1110,8 +1133,19 @@
         const colorStrip = content.querySelector(".color-strip");
         data.colors.forEach((c) => {
           const block = document.createElement("div");
-          block.className = "color-block";
+          const currColor = getQueryColor();
+          const newColor = c.slice(1);
+          if (currColor === newColor) {
+            block.className = "color-block-active";
+          } else {
+            block.className = "color-block";
+          }
+          
           block.style.background = c;
+          block.onclick = (e) => {
+            e.stopPropagation()
+            toggleColor(newColor)
+          }
           colorStrip.appendChild(block);
         });
 
