@@ -257,6 +257,15 @@
         cursor: default;
       }
 
+      .card {
+        animation: fadeIn 0.2s ease;
+      }
+
+      #sentinel {
+        height: 1px;
+        margin-bottom: 200px;
+      }
+
       * {
         transition: none !important;
         animation: none !important;
@@ -347,11 +356,7 @@
 
     <div id="grid"></div>
 
-    <footer class="footer-nav">
-      <button id="prev" class="secondary">← Prev</button>
-      <span id="pageInfo">Page 1</span>
-      <button id="next" class="secondary">Next →</button>
-    </footer>
+    <div id="sentinel"></div>
 
     <div id="helpOverlay">
       <div class="helpModal">
@@ -417,6 +422,9 @@
       const API = "https://wallhaven.cc/api/v1/search";
       const PROXY = "https://proxy.vmlabs.su:3128/?url=";
 
+      let isLoading = false;
+      let observer;
+
       let currentPage = 1;
       let lastPage = 1;
 
@@ -461,8 +469,10 @@
 
         fetchWallpapers(1);
       }
+      async function fetchWallpapers(page = 1, append = false) {
+        if (isLoading) return;
+        isLoading = true;
 
-      async function fetchWallpapers(page = 1) {
         const data = new FormData(form);
         const params = new URLSearchParams();
 
@@ -477,7 +487,9 @@
         const res = await fetch(`${PROXY}${API}?${params}`);
         const json = await res.json();
 
-        grid.innerHTML = "";
+        if (!append) {
+          grid.innerHTML = "";
+        }
 
         json.data.forEach((w) => {
           const card = document.createElement("div");
@@ -498,7 +510,11 @@
 
         currentPage = json.meta.current_page;
         lastPage = json.meta.last_page;
-        pageInfo.textContent = `Page ${currentPage} / ${lastPage}`;
+
+        isLoading = false;
+
+        observer.unobserve(sentinel);
+        observer.observe(sentinel);
       }
 
       async function openExpanded(w) {
@@ -587,16 +603,9 @@
 
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        fetchWallpapers(1);
+        currentPage = 1;
+        fetchWallpapers(1, false);
       });
-
-      document.getElementById("prev").onclick = () => {
-        if (currentPage > 1) fetchWallpapers(currentPage - 1);
-      };
-
-      document.getElementById("next").onclick = () => {
-        if (currentPage < lastPage) fetchWallpapers(currentPage + 1);
-      };
 
       overlay.onclick = (e) => {
         if (e.target === overlay) overlay.classList.remove("visible");
@@ -636,6 +645,23 @@
       }
 
       fetchWallpapers();
+
+      const sentinel = document.getElementById("sentinel");
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            if (currentPage < lastPage) {
+              fetchWallpapers(currentPage + 1, true);
+            }
+          }
+        },
+        {
+          rootMargin: "200px",
+        },
+      );
+
+      observer.observe(sentinel);
     </script>
   </body>
 </html>
